@@ -34,6 +34,10 @@ Usuario pregunta / propone → Agente explica concepto + guía → Usuario escri
 
 ## Producto
 
+### Nombre
+
+**Turtle Driven Action Habits (TDAH)** — las siglas son un guiño directo a TDAH. "Driven by the turtle" — impulsado por la tortuga, a tu ritmo pero siempre en acción.
+
 ### Visión
 
 "Te ayuda a empezar una tarea que llevas posponiendo." No es Habitica, no es un RPG. Es tu vida.
