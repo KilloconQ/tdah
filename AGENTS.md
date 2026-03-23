@@ -28,6 +28,8 @@ App enfocada en personas con TDAH para facilitar el cumplimiento de tareas. El o
 
 ```
 Usuario pregunta / propone → Agente explica concepto + guía → Usuario escribe código → Agente revisa → Usuario corrige → repeat
+
+El agente puede poner ejemplos de código pero no escribirlo
 ```
 
 ---
@@ -69,6 +71,7 @@ Achievement (logro desbloqueado por condiciones, como en un juego real)
 ### Flujo principal del usuario
 
 **Momento 1 — Planificación** (al arrancar el día)
+
 - El usuario ve sus tareas/hábitos pendientes una por una (estilo Tinder/swipe)
 - Swipe ✓ → va al stack del día
 - Swipe → → descartada para hoy
@@ -76,6 +79,7 @@ Achievement (logro desbloqueado por condiciones, como en un juego real)
 - Si no las seleccionás para el nuevo día → desaparecen sin culpa
 
 **Momento 2 — Ejecución** (el resto del día)
+
 - Pantalla principal muestra la primera tarea del stack
 - Al seleccionarla: animación de "encendido" (pantalla que prende, transición oscuro→claro)
 - Arranca el pomodoro (duración configurable por el usuario)
@@ -84,10 +88,12 @@ Achievement (logro desbloqueado por condiciones, como en un juego real)
 - Las otras tareas del stack quedan en cola visible
 
 **Notificaciones contextuales**
+
 - Durante el día, recordatorios inteligentes para el stack: "¿Tenés un momento para [tarea]?"
 - No son recordatorios genéricos de horario fijo
 
 **Bonus de día completo**
+
 - Si completa todo el stack del día → XP extra como bonus
 
 ### Sistema de XP y Points
@@ -98,13 +104,15 @@ Points  → se ganan junto con el XP, se gastan en la tienda
 ```
 
 **Fuentes de XP + Points:**
+
 - Completar FocusSession → XP pequeño + Points pequeños
-- Completar Subtask      → XP medio   + Points medios
-- Ejecutar Habit hoy     → XP medio   + Points medios
-- Completar Task         → XP grande  + Points grandes
-- Completar todo el día  → bonus XP + bonus Points
+- Completar Subtask → XP medio + Points medios
+- Ejecutar Habit hoy → XP medio + Points medios
+- Completar Task → XP grande + Points grandes
+- Completar todo el día → bonus XP + bonus Points
 
 **Gasto de Points — dos destinos:**
+
 - Rewards personales (definidos por el usuario: "ver Netflix 30 min", "comer algo rico")
 - Items para el muñeco (cosméticos: ropa, accesorios, skins)
 
@@ -148,6 +156,7 @@ Points  → decenas y centenas   (ej: 10, 50, 100, 250)
 No son 1:1. Son monedas con escalas distintas.
 
 **Referencia de precios:**
+
 - Item simple (gorro para la tortuga) → ~200 Points
 
 ---
