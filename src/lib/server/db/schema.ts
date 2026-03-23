@@ -14,7 +14,10 @@ export const task = sqliteTable('task', {
 		.$defaultFn(() => crypto.randomUUID()),
 	title: text('title').notNull(),
 	priority: integer('priority').notNull().default(1),
-	parentTaskId: text('parentTaskId').references((): AnySQLiteColumn => task.id)
+	parentTaskId: text('parent_task_id').references(
+		(): AnySQLiteColumn => task.id
+	),
+	userId: text('user_id').references(() => user.id)
 });
 
 export const goal = sqliteTable('goal', {
@@ -22,7 +25,7 @@ export const goal = sqliteTable('goal', {
 		.primaryKey()
 		.$defaultFn(() => crypto.randomUUID()),
 	title: text('title').notNull(),
-	userId: text('userId')
+	userId: text('user_id')
 		.references(() => user.id)
 		.notNull()
 });
@@ -31,35 +34,57 @@ export const habit = sqliteTable('habit', {
 	id: text('id')
 		.primaryKey()
 		.$defaultFn(() => crypto.randomUUID()),
+	userId: text('user_id')
+		.references(() => user.id)
+		.notNull(),
 	title: text('title').notNull(),
-	description: text('description')
+	description: text('description'),
+	frecuency: text('frecuency')
 });
 
-export const dailyPlan = sqliteTable('dailyPlan', {
+export const dailyPlan = sqliteTable('daily_plan', {
 	id: text('id')
 		.primaryKey()
 		.$defaultFn(() => crypto.randomUUID()),
-	userId: text('userId')
+	userId: text('user_id')
 		.references(() => user.id)
 		.notNull(),
 	date: integer('date', { mode: 'timestamp_ms' }).notNull()
 });
 
-export const dailyPlanItem = sqliteTable('dailyPlanItem', {
+export const dailyPlanItem = sqliteTable('daily_plan_item', {
 	id: text('id')
 		.primaryKey()
 		.$defaultFn(() => crypto.randomUUID()),
-	dailyPlanId: text('dailyPlanId')
+	dailyPlanId: text('daily_plan_id')
 		.references(() => dailyPlan.id, {
 			onDelete: 'cascade'
 		})
 		.notNull(),
-	taskId: text('taskId').references(() => task.id, { onDelete: 'cascade' }),
-	habitId: text('habitId').references(() => habit.id, { onDelete: 'cascade' }),
+	taskId: text('task_id').references(() => task.id, { onDelete: 'cascade' }),
+	habitId: text('habit_id').references(() => habit.id, { onDelete: 'cascade' }),
 	order: integer('order').notNull(),
 	completed: integer('completed', { mode: 'boolean' }).default(false).notNull()
 });
 
+export const focusSession = sqliteTable('focus_session', {
+	id: text('id')
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
+	userId: text('user_id')
+		.references(() => user.id, { onDelete: 'cascade' })
+		.notNull(),
+	habitId: text('habit_id').references(() => habit.id, {
+		onDelete: 'set null'
+	}),
+	taskId: text('task_id').references(() => task.id, { onDelete: 'set null' }),
+	status: text('status', { enum: ['working', 'break', 'completed'] }).notNull(),
+	duration: integer('duration').notNull(),
+	startedAt: integer('started_at', { mode: 'timestamp_ms' }).notNull(),
+	completedAt: integer('completed_at', { mode: 'timestamp_ms' })
+});
+
+// export const reward = sqliteTable();
 // Relations
 
 export const taskRelations = relations(task, ({ many, one }) => ({
