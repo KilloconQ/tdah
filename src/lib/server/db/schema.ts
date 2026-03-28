@@ -13,10 +13,15 @@ export const task = sqliteTable('task', {
 		.primaryKey()
 		.$defaultFn(() => crypto.randomUUID()),
 	title: text('title').notNull(),
+	description: text('description'),
 	priority: integer('priority').notNull().default(1),
 	parentTaskId: text('parent_task_id').references(
 		(): AnySQLiteColumn => task.id
 	),
+	goalId: text('goal_id').references(() => goal.id),
+	status: text('status', { enum: ['pending', 'completed', 'cancelled'] })
+		.notNull()
+		.default('pending'),
 	userId: text('user_id').references(() => user.id)
 });
 
@@ -25,6 +30,8 @@ export const goal = sqliteTable('goal', {
 		.primaryKey()
 		.$defaultFn(() => crypto.randomUUID()),
 	title: text('title').notNull(),
+	description: text('description'),
+	status: text('status', { enum: ['active', 'completed', 'cancelled'] }),
 	userId: text('user_id')
 		.references(() => user.id)
 		.notNull()
@@ -39,7 +46,10 @@ export const habit = sqliteTable('habit', {
 		.notNull(),
 	title: text('title').notNull(),
 	description: text('description'),
-	frecuency: text('frecuency')
+	frequency: text('frequency', {
+		enum: ['daily', 'weekly', 'monthly']
+	}).notNull(),
+	goalId: text('goal_id').references(() => goal.id)
 });
 
 export const dailyPlan = sqliteTable('daily_plan', {
@@ -105,13 +115,69 @@ export const taskRelations = relations(task, ({ many, one }) => ({
 		references: [task.id],
 		relationName: 'subtasks'
 	}),
-	dailyPlanItem: many(dailyPlanItem)
+	dailyPlanItem: many(dailyPlanItem),
+	goal: one(goal, {
+		fields: [task.goalId],
+		references: [goal.id]
+	})
 }));
 
 export const userProfileRelations = relations(userProfile, ({ one }) => ({
 	user: one(user, {
 		fields: [userProfile.userId],
 		references: [user.id]
+	})
+}));
+
+export const goalRelations = relations(goal, ({ many }) => ({
+	tasks: many(task),
+	habits: many(habit)
+}));
+
+export const habitRelations = relations(habit, ({ many, one }) => ({
+	goal: one(goal, {
+		fields: [habit.goalId],
+		references: [goal.id]
+	}),
+	dailyPlanItems: many(dailyPlanItem),
+	focusSessions: many(focusSession)
+}));
+
+export const dailyPlanRelations = relations(dailyPlan, ({ many, one }) => ({
+	user: one(user, {
+		fields: [dailyPlan.userId],
+		references: [user.id]
+	}),
+	items: many(dailyPlanItem)
+}));
+
+export const dailyPlanItemRelations = relations(dailyPlanItem, ({ one }) => ({
+	dailyPlan: one(dailyPlan, {
+		fields: [dailyPlanItem.dailyPlanId],
+		references: [dailyPlan.id]
+	}),
+	task: one(task, {
+		fields: [dailyPlanItem.taskId],
+		references: [task.id]
+	}),
+	habit: one(habit, {
+		fields: [dailyPlanItem.habitId],
+		references: [habit.id]
+	})
+}));
+
+export const focusSessionRelations = relations(focusSession, ({ one }) => ({
+	user: one(user, {
+		fields: [focusSession.userId],
+		references: [user.id]
+	}),
+	task: one(task, {
+		fields: [focusSession.taskId],
+		references: [task.id]
+	}),
+	habit: one(habit, {
+		fields: [focusSession.habitId],
+		references: [habit.id]
 	})
 }));
 
