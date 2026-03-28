@@ -84,6 +84,17 @@ export const focusSession = sqliteTable('focus_session', {
 	completedAt: integer('completed_at', { mode: 'timestamp_ms' })
 });
 
+export const userProfile = sqliteTable('user_profile', {
+	id: text('id')
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
+	userId: text('user_id')
+		.references(() => user.id, { onDelete: 'cascade' })
+		.notNull(),
+	xp: integer('xp').default(0).notNull(),
+	points: integer('points').default(0).notNull()
+});
+
 // export const reward = sqliteTable();
 // Relations
 
@@ -95,6 +106,13 @@ export const taskRelations = relations(task, ({ many, one }) => ({
 		relationName: 'subtasks'
 	}),
 	dailyPlanItem: many(dailyPlanItem)
+}));
+
+export const userProfileRelations = relations(userProfile, ({ one }) => ({
+	user: one(user, {
+		fields: [userProfile.userId],
+		references: [user.id]
+	})
 }));
 
 export * from './auth.schema';
