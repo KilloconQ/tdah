@@ -105,7 +105,68 @@ export const userProfile = sqliteTable('user_profile', {
 	points: integer('points').default(0).notNull()
 });
 
-// export const reward = sqliteTable();
+export const reward = sqliteTable('reward', {
+	id: text('id')
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
+	userId: text('user_id')
+		.references(() => user.id, { onDelete: 'cascade' })
+		.notNull(),
+	title: text('title').notNull(),
+	cost: integer('cost').notNull(),
+	redemptionCount: integer('redemption_count').default(0).notNull()
+});
+
+export const avatarItem = sqliteTable('avatar_item', {
+	id: text('id')
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
+	name: text('name').notNull(),
+	cost: integer('cost').notNull(),
+	imageUrl: text('image_url').notNull(),
+	type: text('type', {
+		enum: ['hat', 'shirt', 'pants', 'shoes', 'accessory']
+	}).notNull()
+});
+
+export const userAvatarItem = sqliteTable('user_avatar_item', {
+	id: text('id')
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
+	userId: text('user_id')
+		.references(() => user.id, { onDelete: 'cascade' })
+		.notNull(),
+	avatarItemId: text('avatar_item_id')
+		.references(() => avatarItem.id, { onDelete: 'cascade' })
+		.notNull(),
+	equipped: integer('equipped', { mode: 'boolean' }).default(false).notNull()
+});
+
+export const achievement = sqliteTable('achievement', {
+	id: text('id')
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
+	title: text('title').notNull(),
+	description: text('description'),
+	series: text('series'),
+	totalSteps: integer('total_steps'),
+	imageUrl: text('image_url').notNull()
+});
+
+export const userAchievement = sqliteTable('user_achievement', {
+	id: text('id')
+		.primaryKey()
+		.$defaultFn(() => crypto.randomUUID()),
+	achievementId: text('achievement_id')
+		.references(() => achievement.id, { onDelete: 'cascade' })
+		.notNull(),
+	progress: integer('progress').default(0).notNull(),
+	unlockedAt: integer('unlocked_at', { mode: 'timestamp_ms' }),
+	userId: text('user_id')
+		.references(() => user.id, { onDelete: 'cascade' })
+		.notNull()
+});
+
 // Relations
 
 export const taskRelations = relations(task, ({ many, one }) => ({
@@ -179,6 +240,46 @@ export const focusSessionRelations = relations(focusSession, ({ one }) => ({
 		fields: [focusSession.habitId],
 		references: [habit.id]
 	})
+}));
+
+export const rewardRelations = relations(reward, ({ one }) => ({
+	user: one(user, {
+		fields: [reward.userId],
+		references: [user.id]
+	})
+}));
+
+export const avatarItemRelations = relations(avatarItem, ({ many }) => ({
+	userItems: many(userAvatarItem)
+}));
+
+export const userAvatarItemRelations = relations(userAvatarItem, ({ one }) => ({
+	user: one(user, {
+		fields: [userAvatarItem.userId],
+		references: [user.id]
+	}),
+	avatarItem: one(avatarItem, {
+		fields: [userAvatarItem.avatarItemId],
+		references: [avatarItem.id]
+	})
+}));
+
+export const userAchievementRelations = relations(
+	userAchievement,
+	({ one }) => ({
+		user: one(user, {
+			fields: [userAchievement.userId],
+			references: [user.id]
+		}),
+		achievement: one(achievement, {
+			fields: [userAchievement.achievementId],
+			references: [achievement.id]
+		})
+	})
+);
+
+export const achievementRelations = relations(achievement, ({ many }) => ({
+	achievedBy: many(userAchievement)
 }));
 
 export * from './auth.schema';
