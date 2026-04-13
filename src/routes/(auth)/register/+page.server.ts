@@ -27,6 +27,6 @@ export const actions = {
 			return fail(500, { message: 'Unexpected error' });
 		}
 
-		return redirect(302, '/demo/better-auth');
+		return redirect(302, '/dashboard');
 	}
 };
