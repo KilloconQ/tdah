@@ -9,7 +9,7 @@ if (!isLocal && !process.env.DATABASE_AUTH_TOKEN) {
 
 export default defineConfig({
 	schema: './src/lib/server/db/schema.ts',
-	dialect: 'turso',
+	dialect: process.env.NODE_ENV === 'dev' ? 'sqlite' : 'turso',
 	dbCredentials: {
 		authToken: process.env.DATABASE_AUTH_TOKEN,
 		url: process.env.DATABASE_URL
