@@ -1,4 +1,6 @@
-<script lang="ts"></script>
+<script lang="ts">
+	let { form } = $props();
+</script>
 
 <div class="flex min-h-screen flex-col items-center justify-center gap-4 p-4">
 	<form method="post" action="?/register" class="w-full max-w-sm">

@@ -3,6 +3,7 @@ import { fail, redirect } from '@sveltejs/kit';
 import { APIError } from 'better-auth/api';
 
 import { auth } from '$lib/server/auth.js';
+import { db } from '$lib/server/db';
 
 export const actions = {
 	register: async ({ request }) => {

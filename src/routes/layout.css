@@ -1,3 +1,22 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
+
+@theme {
+	/* Fondos */
+	--color-background: oklch(97% 0.012 88);
+	--color-surface: oklch(92% 0.018 88);
+
+	/* Verde tortuga */
+	--color-primary: oklch(52% 0.13 150);
+	--color-primary-light: oklch(88% 0.07 150);
+
+	/* Amarillo pastel */
+	--color-accent: oklch(87% 0.13 88);
+	--color-accent-dark: oklch(60% 0.13 82);
+
+	/* Texto */
+	--color-text: oklch(20% 0.01 88);
+	--color-muted: oklch(52% 0.01 88);
+	--color-border: oklch(87% 0.018 88);
+}

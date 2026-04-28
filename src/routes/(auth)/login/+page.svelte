@@ -1,7 +1,7 @@
 <script lang="ts"></script>
 
 <form action="?/login" method="post">
-	<input type="email" placeholder="email" />
-	<input type="password" placeholder="password" />
-	<button placeholder="email">Entrar</button>
+	<input type="email" name="email" placeholder="email" />
+	<input type="password" name="password" placeholder="password" />
+	<button>Entrar</button>
 </form>
