@@ -22,7 +22,10 @@ export const task = sqliteTable('task', {
 	status: text('status', { enum: ['pending', 'completed', 'cancelled'] })
 		.notNull()
 		.default('pending'),
-	userId: text('user_id').references(() => user.id)
+	userId: text('user_id').references(() => user.id),
+	createdAt: integer('created_at', { mode: 'timestamp_ms' })
+		.$defaultFn(() => new Date())
+		.notNull()
 });
 
 export const goal = sqliteTable('goal', {
@@ -32,8 +35,9 @@ export const goal = sqliteTable('goal', {
 	title: text('title').notNull(),
 	description: text('description'),
 	status: text('status', { enum: ['active', 'completed', 'cancelled'] }),
-	userId: text('user_id')
-		.references(() => user.id)
+	userId: text('user_id').references(() => user.id),
+	createdAt: integer('created_at', { mode: 'timestamp_ms' })
+		.$defaultFn(() => new Date())
 		.notNull()
 });
 
@@ -49,7 +53,10 @@ export const habit = sqliteTable('habit', {
 	frequency: text('frequency', {
 		enum: ['daily', 'weekly', 'monthly']
 	}).notNull(),
-	goalId: text('goal_id').references(() => goal.id)
+	goalId: text('goal_id').references(() => goal.id),
+	createdAt: integer('created_at', { mode: 'timestamp_ms' })
+		.$defaultFn(() => new Date())
+		.notNull()
 });
 
 export const dailyPlan = sqliteTable('daily_plan', {
